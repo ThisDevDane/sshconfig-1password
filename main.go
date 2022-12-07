@@ -23,17 +23,17 @@ type OpItemDetails struct {
 	SectionMap    map[string][]OpField
 }
 
-func (item OpItemDetails) GetHostname() string {
+func (item OpItemDetails) getHostname() string {
 	v := item.FieldLabelMap["URL"]
 	return v.Value
 }
 
-func (item OpItemDetails) GetHost() string {
+func (item OpItemDetails) getHost() string {
 	str := strings.Split(item.Title, " ")[0]
 	return strings.ToLower(str)
 }
 
-func (item OpItemDetails) GetUser() string {
+func (item OpItemDetails) getUser() string {
 	v := item.FieldLabelMap["username"]
 	return v.Value
 }
@@ -56,7 +56,7 @@ type Op struct {
 	Tag   string
 }
 
-func (op *Op) Exec(args ...string) ([]byte, error) {
+func (op *Op) exec(args ...string) ([]byte, error) {
 	args = append(args, "--format=json")
 	if op.Vault != "" {
 		args = append(args, fmt.Sprintf("--vault=%s", op.Vault))
@@ -70,7 +70,7 @@ func (op *Op) Exec(args ...string) ([]byte, error) {
 	return result, err
 }
 
-func (op *Op) WhoAmI() error {
+func (op *Op) whoAmI() error {
 	cmd := exec.Command("op", "whoami")
 	result, err := cmd.CombinedOutput()
 	e := &exec.ExitError{}
@@ -85,8 +85,8 @@ func (op *Op) WhoAmI() error {
 	return err
 }
 
-func (op *Op) ListItems() ([]OpListItem, error) {
-	result, err := op.Exec("item", "list", fmt.Sprintf("--tags=%s", op.Tag), "--categories=SERVER")
+func (op *Op) listItems() ([]OpListItem, error) {
+	result, err := op.exec("item", "list", fmt.Sprintf("--tags=%s", op.Tag), "--categories=SERVER")
 	if err != nil {
 		return nil, err
 	}
@@ -95,8 +95,8 @@ func (op *Op) ListItems() ([]OpListItem, error) {
 	return list, err
 }
 
-func (op *Op) GetItem(id string) (OpItemDetails, error) {
-	result, err := op.Exec("item", "get", id)
+func (op *Op) getItem(id string) (OpItemDetails, error) {
+	result, err := op.exec("item", "get", id)
 	if err != nil {
 		return OpItemDetails{}, err
 	}
@@ -131,12 +131,12 @@ func init() {
 }
 
 func main() {
-	if err := op.WhoAmI(); err != nil {
+	if err := op.whoAmI(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
 	}
 
-	items, err := op.ListItems()
+	items, err := op.listItems()
 	if err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -145,26 +145,26 @@ func main() {
 	var handle *os.File
 	if outputPath != "" {
 		handle, err = os.OpenFile(outputPath, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
-        if err != nil {
-            fmt.Println("Unable to open output file", err)
-            os.Exit(1)
-        }
+		if err != nil {
+			fmt.Println("Unable to open output file", err)
+			os.Exit(1)
+		}
 	} else {
 		handle = os.Stdout
 	}
 
 	fmt.Fprintf(handle, "# Generated from sshconfig-1password on %v\n", time.Now().Format(time.RFC3339))
 	for _, item := range items {
-		details, err := op.GetItem(item.Id)
+		details, err := op.getItem(item.Id)
 		if err != nil {
 			fmt.Println(err)
 			continue
 		}
 
-		fmt.Fprintf(handle, "Host %s\n", details.GetHost())
+		fmt.Fprintf(handle, "Host %s\n", details.getHost())
 
-		fmt.Fprintf(handle, "\tHostname %s\n", details.GetHostname())
-		fmt.Fprintf(handle, "\tUser %s\n", details.GetUser())
+		fmt.Fprintf(handle, "\tHostname %s\n", details.getHostname())
+		fmt.Fprintf(handle, "\tUser %s\n", details.getUser())
 
 		if section, ok := details.SectionMap["SSH Config"]; ok {
 			for _, f := range section {
