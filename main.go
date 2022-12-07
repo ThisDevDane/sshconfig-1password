@@ -168,7 +168,7 @@ func main() {
 
 		if section, ok := details.SectionMap["SSH Config"]; ok {
 			for _, f := range section {
-				fmt.Fprintf(handle, "\t%s %s\n", f.Label, strings.TrimSpace(f.Value))
+			    fmt.Fprintf(handle, "\t%s %s\n", f.Label, strings.TrimSpace(f.Value))
 			}
 		}
 
