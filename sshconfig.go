@@ -52,7 +52,7 @@ var validKeys = map[string]func(string, string) error{
 	"HostbasedAuthentication":          validateYesNo,
 	"HostKeyAlgorithms":                bypassValidation,
 	"HostKeyAlias":                     bypassValidation,
-	"Hostname":                         validateHostname,
+	"Hostname":                         ValidateHostname,
 	"IdentitiesOnly":                   validateYesNo,
 	"IdentityAgent":                    bypassValidation,
 	"IdentityFile":                     bypassValidation,
@@ -100,10 +100,10 @@ var validKeys = map[string]func(string, string) error{
 	"TCPKeepAlive":                     validateYesNo,
 	"Tunnel":                           bypassValidation,
 	"TunnelDevice":                     bypassValidation,
-	"UpdateHostKeys":                   validateYesNoAsk,
+	"UpdateHostKeys":                   ValidateYesNoAsk,
 	"User":                             ValidateUser,
 	"UserKnownHostsFile":               bypassValidation,
-	"VerifyHostKeyDNS":                 validateYesNoAsk,
+	"VerifyHostKeyDNS":                 ValidateYesNoAsk,
 	"VisualHostKey":                    validateYesNo,
 	"XAuthLocation":                    bypassValidation,
 }
@@ -136,11 +136,11 @@ func ValidateUser(key string, value string) error {
 	return nil
 }
 
-func validateHostname(key string, value string) error {
+func ValidateHostname(key string, value string) error {
 	_, netErr := netip.ParseAddr(value)
 	_, urlErr := url.Parse(value)
 
-	if netErr != nil || urlErr != nil {
+	if netErr != nil && urlErr != nil {
 		return fmt.Errorf("decleration value for '%s' is not valid: '%s' (%w)", key, value, errCoalesce(netErr, urlErr))
 	}
 
@@ -167,7 +167,7 @@ func validateYesNo(key string, value string) error {
 	return nil
 }
 
-func validateYesNoAsk(key string, value string) error {
+func ValidateYesNoAsk(key string, value string) error {
 	if value == "Ask" {
 		return fmt.Errorf("declaration value for '%s' has wrong casing, yes/no/ask value must be all lowercase, current: '%s'", key, value)
 	}
