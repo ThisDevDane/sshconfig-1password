@@ -16,10 +16,10 @@ func init() {
 	flag.StringVar(&op.Vault, "vault", "", "Vault to fetch servers from")
 	flag.StringVar(&op.Tag, "tag", "ssh-gen", "Tag to lookup specific servers to add to the config")
 	flag.StringVar(&outputPath, "out", "", "Path of output file (defaults to stdout)")
-	flag.Parse()
 }
 
 func main() {
+	flag.Parse()
 	if err := op.whoAmI(); err != nil {
 		log.Fatalln(err)
 	}
