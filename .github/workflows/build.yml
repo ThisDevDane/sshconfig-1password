@@ -19,7 +19,6 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version-file: "go.mod"
-        cache: true
 
     - name: Build
       run: GOOS=${{ matrix.os }};GOARCH=${{ matrix.arch }}; go build -o ./output/sshconfig-1password-${{ matrix.os }}-${{ matrix.arch }} -v .
