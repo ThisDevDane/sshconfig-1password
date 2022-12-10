@@ -30,7 +30,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: Go-results-${{ matrix.os }}-${{ matrix.arch }}
-        path: TestResult-${{ matrix.os }}-${{ matrix.arch }}.json
+        path: TestResults-${{ matrix.os }}-${{ matrix.arch }}.json
 
     - name: Build
       run: GOOS=${{ matrix.os }};GOARCH=${{ matrix.arch }}; go build -o ./output/sshconfig-1password-${{ matrix.os }}-${{ matrix.arch }} -v .
