@@ -32,14 +32,21 @@ jobs:
         name: Go-Results-${{ matrix.os }}-${{ matrix.arch }}
         path: TestResults-${{ matrix.os }}-${{ matrix.arch }}.json
 
+    - name: Generate app name
+      run: echo "app_name=sshconfig-1password-${{ matrix.os }}-${{ matrix.arch }}" >> $GITHUB_ENV
+
+    - name: Add .exe on windows to app name
+      if: ${{ matrix.os == "windows" }}
+      run: echo "app_name=${{ env.app_name }}.exe" >> $GITHUB_ENV
+
     - name: Build
-      run: GOOS=${{ matrix.os }};GOARCH=${{ matrix.arch }}; go build -ldflags "-X main.gitHash=$GIT_COMMIT" -o sshconfig-1password-${{ matrix.os }}-${{ matrix.arch }} -v .
+      run: GOOS=${{ matrix.os }};GOARCH=${{ matrix.arch }}; go build -ldflags "-X main.gitHash=$GIT_COMMIT" -o ${{ env.app_name }} -v .
        
     - name: Archive build articfacts
       uses: actions/upload-artifact@v3
       with:
-        name: sshconfig-1password-${{ matrix.os }}-${{ matrix.arch }}
+        name: ${{ env.app_name }}
         path: |
-          sshconfig-1password-${{ matrix.os }}-${{ matrix.arch }}
+          ${{ env.app_name }}
           LICENSE
           README.md
