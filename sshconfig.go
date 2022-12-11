@@ -6,7 +6,6 @@ import (
 	"net/url"
 	"regexp"
 	"strconv"
-	"strings"
 )
 
 var validKeys = map[string]func(string, string) error{
@@ -114,12 +113,11 @@ func validateConfigDecleration(key string, value string) error {
 		return fmt.Errorf("%s is not a valid ssh config decleration", key)
 	}
 
-	cleanedValue := strings.TrimSpace(value)
-	if cleanedValue == "" {
+	if value == "" {
 		return fmt.Errorf("value for '%s' is an empty string or pure whitspace '%s'", key, value)
 	}
 
-	return validateFunc(key, cleanedValue)
+	return validateFunc(key, value)
 }
 
 func bypassValidation(key string, value string) error {

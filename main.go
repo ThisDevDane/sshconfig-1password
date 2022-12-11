@@ -64,11 +64,12 @@ func outputHostConfig(handle *os.File, item OpItemDetails) {
 
 	if section, ok := item.SectionMap["SSH Config"]; ok {
 		for _, f := range section {
-			if err := validateConfigDecleration(f.Label, f.Value); err != nil {
+			val := strings.TrimSpace(f.Value)
+			if err := validateConfigDecleration(f.Label, val); err != nil {
 				log.Println(err)
 				continue
 			}
-			fmt.Fprintf(handle, "\t%s %s\n", f.Label, strings.TrimSpace(f.Value))
+			fmt.Fprintf(handle, "\t%s %s\n", f.Label, val)
 		}
 	}
 }
