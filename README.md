@@ -5,6 +5,7 @@ This utility is for generating a sshconfig you can `Include` in your main config
 ## Requirements
 
 - [1Password CLI](https://1password.com/downloads/command-line/) (`op`). _Developed and tested with 2.9.1_.
+- Have 1Password CLIC available in your PATH under the name `op`
 
 ## Usage
 
