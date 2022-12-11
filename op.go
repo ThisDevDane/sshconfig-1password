@@ -20,21 +20,28 @@ type OpItemDetails struct {
 }
 
 func (item OpItemDetails) getHostname() string {
-	v := item.FieldLabelMap["URL"]
-	return v.Value
+	hostname := item.FieldLabelMap["URL"].Value
+    if v, ok := item.FieldLabelMap["Hostname"]; ok {
+		hostname = v.Value
+	}
+	return hostname
+
 }
 
 func (item OpItemDetails) getHost() string {
-    host := item.Title
-    if v, ok := item.FieldLabelMap["Host"]; ok {
-        host = v.Value
-    }
+	host := item.Title
+	if v, ok := item.FieldLabelMap["Host"]; ok {
+		host = v.Value
+	}
 	return host
 }
 
 func (item OpItemDetails) getUser() string {
-	v := item.FieldLabelMap["username"]
-	return v.Value
+	username := item.FieldLabelMap["username"].Value
+	if v, ok := item.FieldLabelMap["User"]; ok {
+		username = v.Value
+	}
+	return username
 }
 
 type OpSection struct {
