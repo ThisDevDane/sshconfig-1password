@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"os/exec"
-	"strings"
 )
 
 type OpListItem struct {
@@ -26,8 +25,11 @@ func (item OpItemDetails) getHostname() string {
 }
 
 func (item OpItemDetails) getHost() string {
-	str := strings.Split(item.Title, " ")[0]
-	return strings.ToLower(str)
+    host := item.Title
+    if v, ok := item.FieldLabelMap["Host"]; ok {
+        host = v.Value
+    }
+	return host
 }
 
 func (item OpItemDetails) getUser() string {
