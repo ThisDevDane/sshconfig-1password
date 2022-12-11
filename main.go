@@ -12,14 +12,26 @@ import (
 var op Op
 var outputPath string
 
+const VERSION = "0.0.0"
+
+var gitHash = "N/A"
+var printVersion = false
+
 func init() {
 	flag.StringVar(&op.Vault, "vault", "", "Vault to fetch servers from")
 	flag.StringVar(&op.Tag, "tag", "ssh-gen", "Tag to lookup specific servers to add to the config")
 	flag.StringVar(&outputPath, "out", "", "Path of output file (defaults to stdout)")
+	flag.BoolVar(&printVersion, "version", false, "Print current version")
 }
 
 func main() {
 	flag.Parse()
+
+	if printVersion {
+		fmt.Printf("%s+%s", VERSION, gitHash)
+		os.Exit(0)
+	}
+
 	if err := op.whoAmI(); err != nil {
 		log.Fatalln(err)
 	}
