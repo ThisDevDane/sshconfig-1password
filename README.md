@@ -18,6 +18,16 @@ the utility will by default look for the tag `ssh-gen` but you can change that t
 Furthermore, you can add a section called `SSH Config` (exact casing) to the Server item and it will take every field in there, perform basic validation on it
 and add it to the generated config.
 
+![1Pass example image](1pass-example.png)
+```
+# Generated from sshconfig-1password on 2022-12-11T15:04:50+01:00 using sshconfig-1password version 0.0.0+N/A
+Host brewmaster
+        Hostname 192.168.1.147
+        User hoej
+        Port 2222
+        ForwardAgent yes
+```
+
 ### CLI 
 
 When running the application you have to have the 1password cli `op` already authenticated, usually done with `eval $(op signin)` or if you have the option to have it authenticated via
@@ -37,5 +47,8 @@ Usage of sshconfig-1password:
 ```
 
 Once that is done, you simply take the generated file and use an `Include` directive in your main sshconfig file to 
-include this generated file and you can start ssh'ing using the 'Server' items in your vault.
+include this generated file and you can start ssh'ing using the 'Server' items in your vault. Example:
+```sh
+sshconfig-1password -vault Personal -tag sshconfig -o 1pass.sshconfig
+```
 
