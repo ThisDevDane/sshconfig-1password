@@ -21,7 +21,7 @@ type OpItemDetails struct {
 
 func (item OpItemDetails) getHostname() string {
 	hostname := item.FieldLabelMap["URL"].Value
-    if v, ok := item.FieldLabelMap["Hostname"]; ok {
+	if v, ok := item.FieldLabelMap["Hostname"]; ok {
 		hostname = v.Value
 	}
 	return hostname
