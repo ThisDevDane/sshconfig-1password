@@ -36,7 +36,7 @@ jobs:
       run: echo "app_name=sshconfig-1password-${{ matrix.os }}-${{ matrix.arch }}" >> $GITHUB_ENV
 
     - name: Add .exe on windows to app name
-      if: ${{ matrix.os == "windows" }}
+      if: ${{ matrix.os == 'windows' }}
       run: echo "app_name=${{ env.app_name }}.exe" >> $GITHUB_ENV
 
     - name: Build
