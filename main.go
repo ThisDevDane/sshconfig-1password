@@ -28,7 +28,7 @@ func main() {
 	flag.Parse()
 
 	if printVersion {
-		fmt.Printf("%s+%s", VERSION, gitHash)
+		fmt.Println(getVersionString())
 		os.Exit(0)
 	}
 
@@ -73,8 +73,12 @@ func outputHostConfig(handle *os.File, item OpItemDetails) {
 	}
 }
 
+func getVersionString() string {
+	return fmt.Sprintf("%s+%s", VERSION, gitHash)
+}
+
 func outputGenerateHeader(handle *os.File) {
-	fmt.Fprintf(handle, "# Generated from sshconfig-1password on %v\n", time.Now().Format(time.RFC3339))
+	fmt.Fprintf(handle, "# Generated from sshconfig-1password on %v using sshconfig-1password version %s\n", time.Now().Format(time.RFC3339), getVersionString())
 }
 
 func getOuptutHandle() *os.File {
