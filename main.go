@@ -12,7 +12,7 @@ import (
 var op Op
 var outputPath string
 
-const VERSION = "0.0.0"
+const VERSION = "0.0.1"
 
 var gitHash = "N/A"
 var printVersion = false
