@@ -38,6 +38,7 @@ jobs:
     - name: Archive build articfacts
       uses: actions/upload-artifact@v3
       with:
+        name: sshconfig-1password-${{ matrix.os }}-${{ matrix.arch }}
         path: |
           sshconfig-1password-${{ matrix.os }}-${{ matrix.arch }}
           LICENSE
