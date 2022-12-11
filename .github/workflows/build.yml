@@ -33,7 +33,7 @@ jobs:
         path: TestResults-${{ matrix.os }}-${{ matrix.arch }}.json
 
     - name: Generate app name
-      run: echo "app_name=sshconfig-1password-${{ matrix.os }}-${{ matrix.arch }}" >> $GITHUB_ENV
+      run: echo "app_name=sshconfig-1password" >> $GITHUB_ENV
 
     - name: Add .exe on windows to app name
       if: ${{ matrix.os == 'windows' }}
@@ -45,7 +45,7 @@ jobs:
     - name: Archive build articfacts
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.app_name }}
+        name: ${{ env.app_name }}-${{ matrix.os }}-${{ matrix.arch }}
         path: |
           ${{ env.app_name }}
           LICENSE
