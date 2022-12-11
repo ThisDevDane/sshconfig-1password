@@ -20,7 +20,7 @@ var printVersion = false
 func init() {
 	flag.StringVar(&op.Vault, "vault", "", "Vault to fetch servers from")
 	flag.StringVar(&op.Tag, "tag", "ssh-gen", "Tag to lookup specific servers to add to the config")
-	flag.StringVar(&outputPath, "out", "", "Path of output file (defaults to stdout)")
+	flag.StringVar(&outputPath, "out", "stdout", "Path of output file or stdout/stderr")
 	flag.BoolVar(&printVersion, "version", false, "Print current version")
 }
 
@@ -85,14 +85,17 @@ func outputGenerateHeader(handle *os.File) {
 func getOuptutHandle() *os.File {
 	var handle *os.File
 	var err error
-	if outputPath != "" {
+	switch outputPath {
+	case "stdout":
+		handle = os.Stdout
+	case "stderr":
+		handle = os.Stderr
+	default:
 		handle, err = os.OpenFile(outputPath, os.O_CREATE|os.O_TRUNC|os.O_WRONLY, 0644)
 		if err != nil {
 			fmt.Println("Unable to open output file", err)
 			os.Exit(1)
 		}
-	} else {
-		handle = os.Stdout
 	}
 
 	return handle
